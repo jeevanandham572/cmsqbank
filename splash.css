@@ -1,0 +1,171 @@
+.cms-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 24px;
+  overflow: hidden;
+  background: #080808;
+  color: #fff;
+  text-align: center;
+  transition: opacity 240ms ease, visibility 240ms ease;
+  animation: cms-splash-failsafe 0s 10s forwards;
+}
+
+.cms-splash.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.cms-splash__content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: min(100%, 360px);
+}
+
+.cms-splash__icon {
+  display: block;
+  width: clamp(190px, 36vw, 280px);
+  height: auto;
+  margin-bottom: 8px;
+  object-fit: contain;
+}
+
+.cms-splash__name {
+  margin: 0;
+  font-family: "Space Grotesk", Inter, Arial, sans-serif;
+  font-size: clamp(30px, 6vw, 42px);
+  font-weight: 700;
+  letter-spacing: -.055em;
+  line-height: 1.1;
+}
+
+.cms-splash__tagline {
+  margin: 9px 0 0;
+  color: #c4c4c4;
+  font-family: Inter, Arial, sans-serif;
+  font-size: clamp(12px, 2.4vw, 14px);
+  font-weight: 500;
+  letter-spacing: .11em;
+}
+
+.cms-splash__quote {
+  max-width: 34ch;
+  min-height: 6em;
+  margin: 30px 0 0;
+  color: #ededed;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(16px, 3.5vw, 21px);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.cms-splash__quote-copy::before { content: "“"; }
+.cms-splash__quote-copy::after { content: "”"; }
+
+.cms-splash__author {
+  display: block;
+  margin-top: 12px;
+  opacity: 0;
+  color: #aaa;
+  font-family: Inter, Arial, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .04em;
+  transform: translateY(8px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.cms-splash.is-quote-visible .cms-splash__author {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cms-splash__offline-dots[hidden] { display: none; }
+.cms-splash__offline-dots {
+  display: inline-flex;
+  margin-left: 2px;
+  white-space: nowrap;
+}
+
+.cms-splash__offline-dots span {
+  opacity: .2;
+  animation: cms-splash-dot 1050ms ease-in-out infinite;
+}
+
+.cms-splash__offline-dots span:nth-child(2) { animation-delay: 130ms; }
+.cms-splash__offline-dots span:nth-child(3) { animation-delay: 260ms; }
+.cms-splash__offline-dots span:nth-child(4) { animation-delay: 390ms; }
+.cms-splash__offline-dots span:nth-child(5) { animation-delay: 520ms; }
+
+@keyframes cms-splash-dot {
+  0%, 65%, 100% { opacity: .2; }
+  25% { opacity: 1; }
+}
+
+.cms-splash.is-playing .cms-splash__icon {
+  animation: cms-splash-icon-sequence 3000ms ease-in-out both;
+}
+
+.cms-splash.is-playing .cms-splash__name {
+  animation: cms-splash-name-sequence 3000ms ease-in-out both;
+}
+
+.cms-splash.is-playing .cms-splash__tagline {
+  animation: cms-splash-tagline-sequence 3000ms ease-in-out both;
+}
+
+.cms-splash.is-playing .cms-splash__quote {
+  animation: cms-splash-quote-fade 5000ms ease-in-out 800ms both;
+}
+
+@keyframes cms-splash-icon-sequence {
+  0% { opacity: 0; transform: translateY(28px) scale(.86); }
+  28% { opacity: 1; transform: translateY(0) scale(1); }
+  65% { opacity: 1; transform: translateY(-6px) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cms-splash-name-sequence {
+  0%, 10% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateY(10px); }
+  35%, 100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translateY(0); }
+}
+
+@keyframes cms-splash-tagline-sequence {
+  0%, 20% { opacity: 0; transform: translateY(12px); }
+  45%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cms-splash-quote-fade {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cms-splash-failsafe {
+  to { visibility: hidden; pointer-events: none; }
+}
+
+@media (max-height: 520px) {
+  .cms-splash__icon { width: clamp(120px, 24vh, 180px); }
+  .cms-splash__quote { min-height: 4.5em; margin-top: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cms-splash.is-playing .cms-splash__icon,
+  .cms-splash.is-playing .cms-splash__name,
+  .cms-splash.is-playing .cms-splash__tagline,
+  .cms-splash.is-playing .cms-splash__quote,
+  .cms-splash.is-playing .cms-splash__author,
+  .cms-splash__offline-dots span {
+    animation: none;
+    transition: none;
+  }
+
+  .cms-splash { transition: none; }
+  .cms-splash__offline-dots span { opacity: 1; }
+}
